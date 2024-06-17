@@ -1,14 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.hilt.android)
 }
 
 android {
-    namespace = "com.ali.starwarssearch"
+    namespace = "com.sf.starwarssearch"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.ali.starwarssearch"
+        applicationId = "com.sf.starwarssearch"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -74,5 +76,10 @@ dependencies {
 
     //Okhttp
     implementation(libs.okhttp)
+
+    //Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
 
 }
