@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -84,42 +85,57 @@ fun SearchScreen(viewModel: SearchViewModel) {
                 onValueChange = {
                     query = it
                 },
+                isError = ((state is SearchState.EmptyState) || (state is SearchState.ErrorState)),
                 modifier = Modifier
                     .padding(top = paddingValues.calculateTopPadding())
                     .fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { viewModel.getSearchResult(query) }, enabled = query.isNotEmpty()) {
+            Button(
+                onClick = { viewModel.handleSearchIntent(SearchIntent.Search(query)) },
+                enabled = query.isNotEmpty()
+            ) {
                 Text("Search")
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
-                if (state?.isEmpty() == true) {
-//                    NoResultView()
-                } else {
-                    state?.let { peoples ->
-                        item {
-                            Text(
-                                text = "${peoples.size} Items",
-                                modifier = Modifier.wrapContentWidth(),
-                                color = colorResource(id = R.color.white),
-                                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
-                            )
-                        }
+            when (state) {
+                is SearchState.LoadingState -> {
+                    if ((state as SearchState.LoadingState).isLoading) ShowLoadingView()
+                }
 
-                        items(items = peoples, key = { it.name }) { people ->
-                            Spacer(modifier = Modifier.padding(top = 8.dp))
-                            SearchItem(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(4.dp)
-                                    .clickable { }, people
-                            )
+                is SearchState.ResultState -> {
+                    val result = (state as SearchState.ResultState).result
+                    result.let { results ->
+                        LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
+                            item {
+                                Text(
+                                    text = "${result.count} Items",
+                                    modifier = Modifier.wrapContentWidth(),
+                                    color = colorResource(id = R.color.white),
+                                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+                                )
+                            }
+
+                            items(items = results.results, key = { it.name }) { people ->
+                                Spacer(modifier = Modifier.padding(top = 8.dp))
+                                SearchItem(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(4.dp)
+                                        .clickable { }, people
+                                )
+                            }
                         }
                     }
                 }
+
+                is SearchState.EmptyState -> {
+                    NoResultView()
+                }
+
+                is SearchState.ErrorState -> {}
             }
         }
     }
@@ -200,5 +216,18 @@ fun NoResultView() {
         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = stringResource(id = R.string.no_result_found))
+    }
+}
+
+@Composable
+fun ShowLoadingView() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
+        CircularProgressIndicator()
     }
 }

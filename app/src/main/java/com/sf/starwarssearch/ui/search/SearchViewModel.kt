@@ -14,16 +14,32 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(private val getSearchResultUseCase: GetSearchResultUseCase) :
     ViewModel() {
 
-    private val _state = MutableStateFlow<List<PeopleItemModel>?>(null)
-    val state: StateFlow<List<PeopleItemModel>?> = _state
+    private val _state = MutableStateFlow<SearchState>(SearchState.LoadingState(false))
+    val state: StateFlow<SearchState> = _state
     var page = 1
 
-    fun getSearchResult(keyword: String) {
+
+    fun handleSearchIntent(intent: SearchIntent) {
+        when (intent) {
+            is SearchIntent.Search -> {
+                getSearchResult(intent.query)
+            }
+
+            SearchIntent.Loading -> {}
+            SearchIntent.NoResultFound -> {}
+        }
+    }
+
+    private fun getSearchResult(keyword: String) {
         viewModelScope.launch {
+            _state.value = SearchState.LoadingState(true)
             try {
                 val result = getSearchResultUseCase.getSearchResult(keyword, page)
-                _state.value = result.results
+                if (result.count == 0) _state.value =
+                    SearchState.EmptyState else _state.value =
+                    SearchState.ResultState(result = result)
             } catch (e: Exception) {
+                _state.value = SearchState.ErrorState(error = e.message)
             }
         }
     }
