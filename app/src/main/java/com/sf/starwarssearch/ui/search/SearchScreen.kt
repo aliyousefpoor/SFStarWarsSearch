@@ -1,6 +1,7 @@
 package com.sf.starwarssearch.ui.search
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,10 +42,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sf.starwarssearch.R
 import com.sf.starwarssearch.domain.model.PeopleItemModel
 
@@ -56,26 +62,37 @@ fun SearchScreen(viewModel: SearchViewModel) {
 
 
     Scaffold(topBar = {
-        CenterAlignedTopAppBar(title = { Text("Search") })
+        CenterAlignedTopAppBar(title = {
+            Text(
+                "Search",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        })
     }, snackbarHost = { SnackbarHost(snackBarHostState) }) { paddingValues ->
 
         Column(modifier = Modifier.padding(16.dp)) {
-            var query by remember { mutableStateOf("") }
+            var query by remember { mutableStateOf(viewModel.query ?: "") }
             OutlinedTextField(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorResource(id = R.color.blue),
-                    unfocusedBorderColor = colorResource(id = R.color.gray_200),
+                    unfocusedBorderColor = colorResource(id = R.color.white),
                     focusedLabelColor = colorResource(id = R.color.blue),
                     cursorColor = colorResource(id = R.color.blue),
-                    focusedTextColor = colorResource(id = R.color.gray_200),
+                    focusedTextColor = colorResource(id = R.color.white),
                     errorBorderColor = colorResource(id = R.color.red),
                     errorLabelColor = colorResource(id = R.color.red),
                     errorCursorColor = colorResource(id = R.color.red),
-                    errorTextColor = colorResource(id = R.color.gray_200)
+                    errorTextColor = colorResource(id = R.color.white)
                 ),
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Default.Search, contentDescription = null
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        tint = colorResource(
+                            id = R.color.white
+                        )
                     )
                 },
                 value = query,
@@ -178,7 +195,7 @@ fun SearchItem(modifier: Modifier, people: PeopleItemModel) {
                         modifier = Modifier
                             .wrapContentWidth()
                             .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
                     )
                 }
 
@@ -194,7 +211,7 @@ fun SearchItem(modifier: Modifier, people: PeopleItemModel) {
                         modifier = Modifier
                             .wrapContentWidth()
                             .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
                     )
 
                     Text(
@@ -205,6 +222,32 @@ fun SearchItem(modifier: Modifier, people: PeopleItemModel) {
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal)
                     )
                 }
+
+                if (people.films.isNotEmpty()) {
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Films Count : ",
+                            modifier = Modifier
+                                .wrapContentWidth()
+                                .padding(vertical = 2.dp, horizontal = 4.dp),
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        )
+
+                        Text(
+                            text = "${people.films.size}",
+                            modifier = Modifier
+                                .wrapContentWidth()
+                                .padding(vertical = 2.dp, horizontal = 4.dp),
+                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal)
+                        )
+                    }
+                }
             }
         }
     }
@@ -213,9 +256,25 @@ fun SearchItem(modifier: Modifier, people: PeopleItemModel) {
 @Composable
 fun NoResultView() {
     Column(
-        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = stringResource(id = R.string.no_result_found))
+        Image(
+            painter = painterResource(id = R.drawable.not_found),
+            contentDescription = "",
+            modifier = Modifier
+                .size(80.dp),
+            colorFilter = ColorFilter.tint(color = colorResource(id = R.color.white))
+        )
+        Text(
+            text = stringResource(id = R.string.no_result_found),
+            modifier = Modifier.padding(vertical = 16.dp),
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.SemiBold
+            )
+        )
     }
 }
 
@@ -228,6 +287,11 @@ fun ShowLoadingView() {
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(50.dp)
+                .padding(top = 16.dp),
+            color = colorResource(id = R.color.blue)
+        )
     }
 }
