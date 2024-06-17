@@ -229,7 +229,7 @@ fun SearchItem(modifier: Modifier, people: PeopleItemModel) {
                     )
                 }
 
-                if (people.films.isNotEmpty()) {
+                if (people.films?.isNotEmpty() == true) {
                     Row(
                         modifier = modifier
                             .fillMaxWidth()
