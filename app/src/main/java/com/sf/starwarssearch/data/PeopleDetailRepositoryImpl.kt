@@ -1,13 +1,18 @@
 package com.sf.starwarssearch.data
 
-import android.media.Image.Plane
 import com.sf.starwarssearch.data.datasource.FilmsRemoteDataSource
 import com.sf.starwarssearch.data.datasource.PlanetRemoteDataSource
 import com.sf.starwarssearch.data.datasource.SpeciesRemoteDataSource
+import com.sf.starwarssearch.data.mapper.mapToFilmsModel
+import com.sf.starwarssearch.data.mapper.mapToPlanetModel
+import com.sf.starwarssearch.data.mapper.mapToSpeciesModel
 import com.sf.starwarssearch.data.model.FilmsEntity
 import com.sf.starwarssearch.data.model.PlanetEntity
 import com.sf.starwarssearch.data.model.SpeciesEntity
+import com.sf.starwarssearch.domain.model.FilmsModel
 import com.sf.starwarssearch.domain.model.PeopleDetailModel
+import com.sf.starwarssearch.domain.model.PlanetModel
+import com.sf.starwarssearch.domain.model.SpeciesModel
 import com.sf.starwarssearch.domain.repository.PeopleDetailRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -25,26 +30,26 @@ class PeopleDetailRepositoryImpl @Inject constructor(
         filmsUrls: List<String>?,
         planetUrls: List<String>?
     ) = withContext(Dispatchers.IO) {
-        val speciesList = ArrayList<SpeciesEntity>()
-        val filmsList = ArrayList<FilmsEntity>()
-        val planetList = ArrayList<PlanetEntity>()
+        val speciesList = ArrayList<SpeciesModel>()
+        val filmsList = ArrayList<FilmsModel>()
+        val planetList = ArrayList<PlanetModel>()
         val specifics = async {
             speciesUrls?.forEach {
-                val specieData = getSpecies(it)
+                val specieData = getSpecies(it).mapToSpeciesModel()
                 speciesList.add(specieData)
             }
         }
 
         val films = async {
             filmsUrls?.forEach {
-                val filmData = getFilms(it)
+                val filmData = getFilms(it).mapToFilmsModel()
                 filmsList.add(filmData)
             }
         }
 
         val planets = async {
             planetUrls?.forEach {
-                val planetData = getPlanet(it)
+                val planetData = getPlanet(it).mapToPlanetModel()
                 planetList.add(planetData)
             }
         }
