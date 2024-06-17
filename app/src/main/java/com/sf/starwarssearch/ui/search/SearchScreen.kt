@@ -49,13 +49,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.google.gson.Gson
 import com.sf.starwarssearch.R
 import com.sf.starwarssearch.domain.model.PeopleItemModel
+import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(viewModel: SearchViewModel) {
+fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewModel) {
     val state by viewModel.state.collectAsState()
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -141,7 +143,11 @@ fun SearchScreen(viewModel: SearchViewModel) {
                                     Modifier
                                         .fillMaxWidth()
                                         .padding(4.dp)
-                                        .clickable { }, people
+                                        .clickable {
+                                            val json = Gson().toJson(people)
+                                            val encodedJson = URLEncoder.encode(json, "UTF-8")
+                                            navHostController.navigate(route = "detail/$encodedJson")
+                                        }, people
                                 )
                             }
                         }

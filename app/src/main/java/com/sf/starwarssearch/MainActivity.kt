@@ -9,9 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.sf.starwarssearch.ui.search.SearchScreen
-import com.sf.starwarssearch.ui.search.SearchViewModel
+import androidx.navigation.compose.rememberNavController
 import com.sf.starwarssearch.ui.theme.StarWarsSearchTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = colorResource(id = R.color.white)
                 ) {
-                    ShowSearchScreen()
+                    ShowStarWarsApp()
                 }
             }
         }
@@ -34,7 +32,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ShowSearchScreen() {
-    val viewModel: SearchViewModel = hiltViewModel()
-    SearchScreen(viewModel = viewModel)
+fun ShowStarWarsApp() {
+    val navHostController = rememberNavController()
+    NavGraph(navHostController = navHostController)
 }
