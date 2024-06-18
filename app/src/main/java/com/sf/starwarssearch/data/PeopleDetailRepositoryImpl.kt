@@ -29,7 +29,7 @@ class PeopleDetailRepositoryImpl @Inject constructor(
         speciesUrls: List<String>?,
         filmsUrls: List<String>?,
         planetUrl: String?
-    ) = withContext(Dispatchers.IO) {
+    ): PeopleDetailModel = withContext(Dispatchers.IO) {
         val speciesList = ArrayList<SpeciesModel>()
         val filmsList = ArrayList<FilmsModel>()
         val planetList = ArrayList<PlanetModel>()
