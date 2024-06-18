@@ -1,5 +1,8 @@
 package com.sf.starwarssearch.data.model
 
+import androidx.annotation.Keep
+
+@Keep
 data class PeopleItemEntity(
     val name: String,
     val height: String,

@@ -47,12 +47,12 @@ class SearchViewModel @Inject constructor(private val getSearchResultUseCase: Ge
                         )
                     }
                 try {
-                    val result = getSearchResultUseCase.getSearchResult(keyword, page)
+                    val result = getSearchResultUseCase.invoke(keyword, page)
                     updateFields(result)
                     _state.update { currentState ->
                         SearchState(
                             isError = currentState.isError,
-                            searchResults = result?.copy(results = peopleList),
+                            searchResults = result.copy(results = peopleList),
                             isLoading = false,
                             query = currentState.query
                         )

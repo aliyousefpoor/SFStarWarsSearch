@@ -52,7 +52,7 @@ fun DetailScreen(people: PeopleItemModel, upPress: () -> Unit) {
     val viewModel: DetailViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
-        viewModel.getPeopleDetail(people.species, people.films, people.homeworld)
+        viewModel.getPeopleDetail(people.species, people.films, people.homeWorld)
     }
     Scaffold(topBar = {
         CenterAlignedTopAppBar(title = {
@@ -157,7 +157,7 @@ fun PeopleData(people: PeopleItemModel) {
                     .fillMaxWidth()
             )
             Text(
-                text = stringResource(id = R.string.birth_year, people.birth_year ?: ""),
+                text = stringResource(id = R.string.birth_year, people.birthYear),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
@@ -223,9 +223,9 @@ fun FilmDetail(
         )
     }
 
-    if (!filmsModel.opening_crawl.isNullOrEmpty()) {
+    if (!filmsModel.openingCrawl.isNullOrEmpty()) {
         Text(
-            text = stringResource(id = R.string.detail, filmsModel.opening_crawl),
+            text = stringResource(id = R.string.detail, filmsModel.openingCrawl),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = modifier.fillMaxWidth()
@@ -266,7 +266,7 @@ fun SpeciesData(species: List<SpeciesModel>) {
                             modifier = modifier
                         )
                     }
-                    specie.homeworld?.let { homeWorld ->
+                    specie.homeWorld?.let { homeWorld ->
                         SpeciesHomeWorldItem(
                             homeWorld = homeWorld,
                             modifier = modifier

@@ -1,7 +1,8 @@
 package com.sf.starwarssearch.data.model
 
-import com.sf.starwarssearch.data.model.PeopleItemEntity
+import androidx.annotation.Keep
 
+@Keep
 data class SearchResponseEntity(
     val count: Int,
     val next: String?,

@@ -25,12 +25,12 @@ fun PeopleItemEntity.mapToPeopleModel(): PeopleItemModel {
         name = name,
         height = height,
         mass = mass,
-        hair_color = hair_color,
-        skin_color = skin_color,
-        eye_color = eye_color,
-        birth_year = birth_year,
+        hairColor = hair_color,
+        skinColor = skin_color,
+        eyeColor = eye_color,
+        birthYear = birth_year,
         gender = gender,
-        homeworld = homeworld,
+        homeWorld = homeworld,
         films = films,
         species = species,
         vehicles = vehicles,
@@ -42,11 +42,11 @@ fun PeopleItemEntity.mapToPeopleModel(): PeopleItemModel {
 }
 
 fun SpeciesEntity.mapToSpeciesModel(): SpeciesModel {
-    return SpeciesModel(name = name, language = language, homeworld = homeworld)
+    return SpeciesModel(name = name, language = language, homeWorld = homeworld)
 }
 
 fun FilmsEntity.mapToFilmsModel(): FilmsModel {
-    return FilmsModel(title = title, opening_crawl = opening_crawl?.replace("\n", ""))
+    return FilmsModel(title = title, openingCrawl = opening_crawl?.replace("\n", ""))
 }
 
 fun PlanetEntity.mapToPlanetModel(): PlanetModel {

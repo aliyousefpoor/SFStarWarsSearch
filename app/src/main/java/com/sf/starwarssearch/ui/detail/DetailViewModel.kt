@@ -31,7 +31,7 @@ class DetailViewModel @Inject constructor(private val getPeopleDetailUseCase: Ge
         viewModelScope.launch {
             try {
                 val result =
-                    getPeopleDetailUseCase.getPeopleDetail(speciesUrl, filmsUrl, planetsUrl)
+                    getPeopleDetailUseCase.invoke(speciesUrl, filmsUrl, planetsUrl)
                 result.let {
                     _state.update {
                         PeopleDataState(

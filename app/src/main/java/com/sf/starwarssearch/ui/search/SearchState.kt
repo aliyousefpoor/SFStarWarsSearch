@@ -19,8 +19,8 @@ class SearchState(
     var isError by mutableStateOf(isError)
     val searchDisplay: SearchDisplay
         get() = when {
-            isLoading == true -> SearchDisplay.Loading
-            isError == true -> SearchDisplay.Error
+            isLoading -> SearchDisplay.Loading
+            isError -> SearchDisplay.Error
             searchResults?.count == 0 && searchResults?.results?.isEmpty() == true -> SearchDisplay.NoResult
             else -> SearchDisplay.Result
         }

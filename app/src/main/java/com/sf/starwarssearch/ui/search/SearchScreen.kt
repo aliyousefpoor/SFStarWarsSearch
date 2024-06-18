@@ -266,7 +266,7 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel, onClick: () ->
                     )
 
                     Text(
-                        text = people.birth_year,
+                        text = people.birthYear,
                         modifier = Modifier
                             .wrapContentWidth()
                             .padding(vertical = 2.dp, horizontal = 4.dp),

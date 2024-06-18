@@ -5,7 +5,7 @@ import com.sf.starwarssearch.domain.repository.PeopleDetailRepository
 import javax.inject.Inject
 
 class GetPeopleDetailUseCase @Inject constructor(private val repository: PeopleDetailRepository) {
-    suspend fun getPeopleDetail(
+    suspend fun invoke(
         speciesUrls: List<String>?,
         filmsUrls: List<String>?,
         planetUrl: String?
