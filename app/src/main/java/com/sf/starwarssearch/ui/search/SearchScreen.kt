@@ -44,31 +44,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.google.gson.Gson
 import com.sf.starwarssearch.R
 import com.sf.starwarssearch.domain.model.PeopleItemModel
-import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewModel) {
+fun SearchScreen(navHostController: NavHostController) {
+    val viewModel: SearchViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(title = {
             Text(
-                "Search",
-                style = MaterialTheme.typography.titleLarge.copy(
+                "Search", style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 )
             )
@@ -117,7 +118,10 @@ fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewMode
 
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { viewModel.getSearchResult(query) },
+                onClick = {
+                    viewModel.getSearchResult(query)
+                    keyboardController?.hide()
+                },
                 enabled = query.isNotEmpty()
             ) {
                 Text("Search")
@@ -131,26 +135,22 @@ fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewMode
 
                 SearchDisplay.Result -> {
                     val result = state.searchResults
-                    result?.let { results ->
+                    if (!result?.results.isNullOrEmpty()) {
                         LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
                             item {
-                                Text(
-                                    text = "${result.count} Items",
-                                    modifier = Modifier.wrapContentWidth(),
-                                    color = colorResource(id = R.color.white),
-                                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
-                                )
+                                SearchItemCount(result?.count!!)
                             }
 
-                            items(items = results.results, key = { it.name }) { people ->
+                            items(
+                                items = result?.results!!,
+                                key = { it.url!! }) { people ->
                                 Spacer(modifier = Modifier.padding(top = 8.dp))
-                                SearchItem(
+                                SearchResultItem(
                                     Modifier
                                         .fillMaxWidth()
                                         .padding(4.dp)
                                         .clickable {
-                                            val json = Gson().toJson(people)
-                                            val encodedJson = URLEncoder.encode(json, "UTF-8")
+                                            val encodedJson = viewModel.preparePeopleModel(people)
                                             navHostController.navigate(route = "detail/$encodedJson")
                                         }, people
                                 )
@@ -171,9 +171,18 @@ fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewMode
     }
 }
 
+@Composable
+fun SearchItemCount(count: Int) {
+    Text(
+        text = "$count Items",
+        modifier = Modifier.wrapContentWidth(),
+        color = colorResource(id = R.color.white),
+        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+    )
+}
 
 @Composable
-fun SearchItem(modifier: Modifier, people: PeopleItemModel) {
+fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
             modifier = Modifier
