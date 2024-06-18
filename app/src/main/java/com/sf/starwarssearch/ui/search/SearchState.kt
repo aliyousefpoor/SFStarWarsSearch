@@ -9,7 +9,7 @@ import com.sf.starwarssearch.domain.model.SearchResponseModel
 @Stable
 class SearchState(
     query: String? = null,
-    isLoading: Boolean = true,
+    isLoading: Boolean = false,
     isError: Boolean = false,
     searchResults: SearchResponseModel? = null
 ) {

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -36,11 +37,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -64,7 +67,8 @@ fun SearchScreen(navHostController: NavHostController) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
-
+    val listState = rememberLazyListState()
+    var isAtEnd by remember { mutableStateOf(false) }
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(title = {
@@ -135,8 +139,21 @@ fun SearchScreen(navHostController: NavHostController) {
 
                 SearchDisplay.Result -> {
                     val result = state.searchResults
+                    LaunchedEffect(listState) {
+                        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull() }
+                            .collect { lastVisibleItem ->
+                                val lastIndex = result?.results?.size?.minus(1)
+                                isAtEnd = lastVisibleItem?.index == lastIndex
+                            }
+                    }
+                    if (isAtEnd && !result?.results.isNullOrEmpty()) {
+                        viewModel.getSearchResult(query)
+                    }
                     if (!result?.results.isNullOrEmpty()) {
-                        LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+                        ) {
                             item {
                                 SearchItemCount(result?.count!!)
                             }
