@@ -83,7 +83,7 @@ object ClassModule {
 
     @Singleton
     @Provides
-    fun provideStarWarsRepository(
+    fun providePeopleDetailRepository(
         speciesRemoteDataSource: SpeciesRemoteDataSource,
         filmsRemoteDataSource: FilmsRemoteDataSource,
         planetRemoteDataSource: PlanetRemoteDataSource

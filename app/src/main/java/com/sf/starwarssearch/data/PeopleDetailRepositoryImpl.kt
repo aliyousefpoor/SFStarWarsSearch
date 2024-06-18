@@ -28,7 +28,7 @@ class PeopleDetailRepositoryImpl @Inject constructor(
     override suspend fun getPeopleDetail(
         speciesUrls: List<String>?,
         filmsUrls: List<String>?,
-        planetUrls: List<String>?
+        planetUrl: String?
     ) = withContext(Dispatchers.IO) {
         val speciesList = ArrayList<SpeciesModel>()
         val filmsList = ArrayList<FilmsModel>()
@@ -48,7 +48,7 @@ class PeopleDetailRepositoryImpl @Inject constructor(
         }
 
         val planets = async {
-            planetUrls?.forEach {
+            planetUrl?.let {
                 val planetData = getPlanet(it).mapToPlanetModel()
                 planetList.add(planetData)
             }
@@ -56,8 +56,8 @@ class PeopleDetailRepositoryImpl @Inject constructor(
 
         listOf(specifics, films, planets).awaitAll()
         PeopleDetailModel(
-            speciesEntities = speciesList,
-            filmsEntities = filmsList,
+            species = speciesList,
+            films = filmsList,
             planetPopulation = planetList
         )
     }

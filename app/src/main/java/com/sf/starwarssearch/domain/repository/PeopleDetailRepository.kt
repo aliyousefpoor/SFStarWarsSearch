@@ -6,6 +6,6 @@ interface PeopleDetailRepository {
     suspend fun getPeopleDetail(
         speciesUrls: List<String>?,
         filmsUrls: List<String>?,
-        planetUrls: List<String>?
+        planetUrl: String?
     ): PeopleDetailModel
 }

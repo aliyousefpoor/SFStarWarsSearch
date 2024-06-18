@@ -8,8 +8,8 @@ class GetPeopleDetailUseCase @Inject constructor(private val repository: PeopleD
     suspend fun getPeopleDetail(
         speciesUrls: List<String>?,
         filmsUrls: List<String>?,
-        planetUrls: List<String>?
+        planetUrl: String?
     ): PeopleDetailModel {
-        return repository.getPeopleDetail(speciesUrls, filmsUrls, planetUrls)
+        return repository.getPeopleDetail(speciesUrls, filmsUrls, planetUrl)
     }
 }
