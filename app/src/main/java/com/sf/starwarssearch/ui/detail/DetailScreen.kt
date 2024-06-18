@@ -31,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -58,11 +57,15 @@ fun DetailScreen(people: PeopleItemModel, upPress: () -> Unit) {
     Scaffold(topBar = {
         CenterAlignedTopAppBar(title = {
             Text(
-                "Detail", style = MaterialTheme.typography.titleLarge.copy(
+                stringResource(id = R.string.detail_title),
+                style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 )
             )
-        }, navigationIcon = { Up(upPress) })
+        },
+            colors = TopAppBarDefaults.topAppBarColors()
+                .copy(containerColor = MaterialTheme.colorScheme.inversePrimary),
+            navigationIcon = { Up(upPress) })
     }) { paddingValue ->
         Box(
             modifier = Modifier
@@ -126,9 +129,9 @@ fun PeopleData(people: PeopleItemModel) {
         Modifier.fillMaxWidth()
     ) {
         Text(
-            text = "People Section:",
+            text = stringResource(id = R.string.people_section),
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-            color = colorResource(id = R.color.white),
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .padding(vertical = 2.dp)
                 .fillMaxWidth()
@@ -136,25 +139,25 @@ fun PeopleData(people: PeopleItemModel) {
 
 
         Text(
-            text = "Name: ${people.name}",
+            text = stringResource(id = R.string.name, people.name),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-            color = colorResource(id = R.color.white),
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .padding(vertical = 2.dp, horizontal = 8.dp)
                 .fillMaxWidth()
         )
         Text(
-            text = "Height: ${people.height} cm",
+            text = stringResource(id = R.string.height, people.height ?: ""),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = colorResource(id = R.color.gray_100),
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .padding(vertical = 2.dp, horizontal = 8.dp)
                 .fillMaxWidth()
         )
         Text(
-            text = "Birth Date: ${people.birth_year}",
+            text = stringResource(id = R.string.birth_year, people.birth_year ?: ""),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = colorResource(id = R.color.white),
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .padding(vertical = 2.dp, horizontal = 8.dp)
                 .fillMaxWidth()
@@ -170,9 +173,9 @@ fun FilmsData(films: List<FilmsModel>) {
             Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Film Section:",
+                text = stringResource(id = R.string.film_section),
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                color = colorResource(id = R.color.white),
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .padding(vertical = 2.dp)
                     .fillMaxWidth()
@@ -202,18 +205,18 @@ fun FilmDetail(
 ) {
     if (!filmsModel.title.isNullOrEmpty()) {
         Text(
-            text = "Title : ${filmsModel.title}",
+            text = stringResource(id = R.string.title, filmsModel.title),
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-            color = colorResource(id = R.color.gray_100),
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = modifier.fillMaxWidth()
         )
     }
 
     if (!filmsModel.opening_crawl.isNullOrEmpty()) {
         Text(
-            text = "Detail : ${filmsModel.opening_crawl}",
+            text = stringResource(id = R.string.detail, filmsModel.opening_crawl),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = colorResource(id = R.color.gray_100),
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = modifier.fillMaxWidth()
         )
     }
@@ -225,9 +228,9 @@ fun SpeciesData(species: List<SpeciesModel>) {
     if (species.isNotEmpty()) {
         Column(Modifier.fillMaxWidth()) {
             Text(
-                text = "Species Section:",
+                text = stringResource(id = R.string.species_section),
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                color = colorResource(id = R.color.white),
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(vertical = 2.dp)
             )
 
@@ -256,9 +259,9 @@ fun SpeciesData(species: List<SpeciesModel>) {
 @Composable
 fun SpeciesNameItem(name: String, modifier: Modifier) {
     Text(
-        text = "Name :$name",
+        text = stringResource(id = R.string.name, name),
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = colorResource(id = R.color.gray_100),
+        color = MaterialTheme.colorScheme.onSecondary,
         modifier = modifier
     )
 }
@@ -267,9 +270,9 @@ fun SpeciesNameItem(name: String, modifier: Modifier) {
 @Composable
 fun SpeciesLanguageItem(language: String, modifier: Modifier) {
     Text(
-        text = "Language : $language",
+        text = stringResource(id = R.string.language, language),
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = colorResource(id = R.color.gray_100),
+        color = MaterialTheme.colorScheme.onSecondary,
         modifier = modifier
     )
 }
@@ -278,9 +281,9 @@ fun SpeciesLanguageItem(language: String, modifier: Modifier) {
 @Composable
 fun SpeciesHomeWorldItem(homeWorld: String, modifier: Modifier) {
     Text(
-        text = "HomeWorld : $homeWorld",
+        text = stringResource(id = R.string.home_world, homeWorld),
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = colorResource(id = R.color.gray_100),
+        color = MaterialTheme.colorScheme.onSecondary,
         modifier = modifier
     )
 }
@@ -291,9 +294,9 @@ fun PlanetData(planets: List<PlanetModel>) {
     if (planets.isNotEmpty()) {
         Column(Modifier.fillMaxWidth()) {
             Text(
-                text = "Planet Section:",
+                text = stringResource(id = R.string.planet_section),
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                color = colorResource(id = R.color.white),
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(vertical = 2.dp)
             )
 
@@ -301,9 +304,9 @@ fun PlanetData(planets: List<PlanetModel>) {
             planets.forEach { planet ->
                 planet.population?.let {
                     Text(
-                        text = "Population : ${planet.population}",
+                        text = stringResource(id = R.string.population, planet.population),
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = colorResource(id = R.color.gray_100),
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
                     )
                 }
@@ -324,10 +327,10 @@ fun ShowErrorView() {
             contentDescription = "",
             modifier = Modifier
                 .size(80.dp),
-            colorFilter = ColorFilter.tint(color = colorResource(id = R.color.white))
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
         )
         Text(
-            text = "error Occurred",
+            text = stringResource(id = R.string.error_occurred),
             modifier = Modifier.padding(vertical = 16.dp),
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontStyle = FontStyle.Italic,
@@ -349,7 +352,7 @@ private fun Up(upPress: () -> Unit) {
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-            tint = colorResource(id = R.color.white),
+            tint = MaterialTheme.colorScheme.onPrimary,
             contentDescription = stringResource(R.string.label_back)
         )
     }

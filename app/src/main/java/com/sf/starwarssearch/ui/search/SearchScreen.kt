@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -71,13 +72,18 @@ fun SearchScreen(navHostController: NavHostController) {
     var isAtEnd by remember { mutableStateOf(false) }
 
     Scaffold(topBar = {
-        CenterAlignedTopAppBar(title = {
-            Text(
-                "Search", style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    stringResource(id = R.string.search_title),
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-            )
-        })
+            },
+            colors = TopAppBarDefaults.topAppBarColors()
+                .copy(containerColor = MaterialTheme.colorScheme.inversePrimary)
+        )
     }, snackbarHost = { SnackbarHost(snackBarHostState) }) { paddingValues ->
 
         Column(
@@ -88,28 +94,26 @@ fun SearchScreen(navHostController: NavHostController) {
             var query by rememberSaveable { mutableStateOf("") }
             OutlinedTextField(
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = colorResource(id = R.color.blue),
-                    unfocusedBorderColor = colorResource(id = R.color.white),
-                    focusedLabelColor = colorResource(id = R.color.blue),
-                    cursorColor = colorResource(id = R.color.blue),
-                    focusedTextColor = colorResource(id = R.color.white),
-                    errorBorderColor = colorResource(id = R.color.red),
-                    errorLabelColor = colorResource(id = R.color.red),
-                    errorCursorColor = colorResource(id = R.color.red),
-                    errorTextColor = colorResource(id = R.color.white)
+                    focusedBorderColor = MaterialTheme.colorScheme.outline,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor = MaterialTheme.colorScheme.outline,
+                    cursorColor = MaterialTheme.colorScheme.outline,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    errorBorderColor = MaterialTheme.colorScheme.onError,
+                    errorLabelColor = MaterialTheme.colorScheme.onError,
+                    errorCursorColor = MaterialTheme.colorScheme.onError,
+                    errorTextColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = null,
-                        tint = colorResource(
-                            id = R.color.white
-                        )
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 value = query,
                 label = {
-                    Text(text = "Search")
+                    Text(text = stringResource(id = R.string.search_title))
                 },
                 onValueChange = {
                     query = it
@@ -126,9 +130,13 @@ fun SearchScreen(navHostController: NavHostController) {
                     viewModel.getSearchResult(query)
                     keyboardController?.hide()
                 },
-                enabled = query.isNotEmpty()
+                enabled = query.isNotEmpty(),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outline)
             ) {
-                Text("Search")
+                Text(
+                    text = stringResource(id = R.string.search_title),
+                    color = colorResource(id = R.color.white)
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -191,9 +199,9 @@ fun SearchScreen(navHostController: NavHostController) {
 @Composable
 fun SearchItemCount(count: Int) {
     Text(
-        text = "$count Items",
+        text = stringResource(id = R.string.item_count, count),
         modifier = Modifier.wrapContentWidth(),
-        color = colorResource(id = R.color.white),
+        color = MaterialTheme.colorScheme.onPrimary,
         style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
     )
 }
@@ -206,7 +214,7 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
                 .fillMaxWidth()
                 .wrapContentHeight(),
             shape = RoundedCornerShape(8.dp),
-            colors = CardDefaults.cardColors(contentColor = colorResource(id = R.color.white))
+            colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onSecondary)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -222,11 +230,12 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Name : ",
+                        text = stringResource(id = R.string.name, ""),
                         modifier = Modifier
                             .wrapContentWidth()
                             .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
 
                     Text(
@@ -234,7 +243,8 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
                         modifier = Modifier
                             .wrapContentWidth()
                             .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
 
@@ -246,11 +256,12 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "BirthDate : ",
+                        text = stringResource(id = R.string.birth_date),
                         modifier = Modifier
                             .wrapContentWidth()
                             .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
 
                     Text(
@@ -258,7 +269,8 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
                         modifier = Modifier
                             .wrapContentWidth()
                             .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal)
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
 
@@ -271,11 +283,12 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Films Count : ",
+                            text = stringResource(id = R.string.film_count),
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .padding(vertical = 2.dp, horizontal = 4.dp),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onPrimary,
                         )
 
                         Text(
@@ -283,7 +296,8 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .padding(vertical = 2.dp, horizontal = 4.dp),
-                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal)
+                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
+                            color = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
                 }
@@ -303,7 +317,7 @@ fun NoResultView() {
             painter = painterResource(id = R.drawable.not_found),
             contentDescription = "",
             modifier = Modifier.size(80.dp),
-            colorFilter = ColorFilter.tint(color = colorResource(id = R.color.white))
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimary)
         )
         Text(
             text = stringResource(id = R.string.no_result_found),
@@ -328,7 +342,7 @@ fun ShowLoadingView() {
             modifier = Modifier
                 .size(50.dp)
                 .padding(top = 16.dp),
-            color = colorResource(id = R.color.blue)
+            color = MaterialTheme.colorScheme.outline
         )
     }
 }

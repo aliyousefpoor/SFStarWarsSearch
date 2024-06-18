@@ -2,4 +2,22 @@
     <string name="app_name">Star Wars Search</string>
     <string name="no_result_found">No Result Found</string>
     <string name="label_back">Back</string>
+    <string name="search_title">Search</string>
+    <string name="detail_title">Detail</string>
+    <string name="people_section">People Section:</string>
+    <string name="species_section">Species Section:</string>
+    <string name="planet_section">Planet Section:</string>
+    <string name="film_section">Film Section:</string>
+    <string name="population">Population: %s</string>
+    <string name="error_occurred">Error Occurred</string>
+    <string name="name">Name: %s</string>
+    <string name="height">Height: %s cm</string>
+    <string name="birth_year">Birthdate: %s</string>
+    <string name="title">Title: %s</string>
+    <string name="detail">Detail: %s</string>
+    <string name="language">Language: %s</string>
+    <string name="home_world">HomeWorld : %s</string>
+    <string name="item_count">%s Items</string>
+    <string name="birth_date">BirthDate :</string>
+    <string name="film_count">Films Count :</string>
 </resources>
