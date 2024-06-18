@@ -1,6 +1,5 @@
 package com.sf.starwarssearch.ui.search
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -173,12 +172,11 @@ fun SearchScreen(navHostController: NavHostController) {
                                 SearchResultItem(
                                     Modifier
                                         .fillMaxWidth()
-                                        .padding(4.dp)
-                                        .clickable {
-                                            val encodedJson = viewModel.preparePeopleModel(people)
-                                            navHostController.navigate(route = "detail/$encodedJson")
-                                        }, people
-                                )
+                                        .padding(4.dp), people
+                                ) {
+                                    val encodedJson = viewModel.preparePeopleModel(people)
+                                    navHostController.navigate(route = "detail/$encodedJson")
+                                }
                             }
                         }
                     }
@@ -207,12 +205,15 @@ fun SearchItemCount(count: Int) {
 }
 
 @Composable
-fun SearchResultItem(modifier: Modifier, people: PeopleItemModel) {
+fun SearchResultItem(modifier: Modifier, people: PeopleItemModel, onClick: () -> Unit) {
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight()
+                .clickable {
+                    onClick.invoke()
+                },
             shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onSecondary)
         ) {
