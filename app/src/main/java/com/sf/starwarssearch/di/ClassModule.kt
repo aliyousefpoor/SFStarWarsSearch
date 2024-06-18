@@ -1,8 +1,8 @@
 package com.sf.starwarssearch.di
 
-import com.sf.starwarssearch.data.StarWarsRepositoryImpl
-import com.sf.starwarssearch.data.datasource.StarWarsRemoteDataSource
-import com.sf.starwarssearch.data.datasource.StarWarsRemoteDataSourceImpl
+import com.sf.starwarssearch.data.SearchRepositoryImpl
+import com.sf.starwarssearch.data.datasource.SearchRemoteDataSource
+import com.sf.starwarssearch.data.datasource.SearchRemoteDataSourceImpl
 import com.sf.starwarssearch.data.service.StarWarsService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -15,7 +15,7 @@ import com.sf.starwarssearch.data.datasource.PlanetRemoteDataSourceImpl
 import com.sf.starwarssearch.data.datasource.SpeciesRemoteDataSource
 import com.sf.starwarssearch.data.datasource.SpeciesRemoteDataSourceImpl
 import com.sf.starwarssearch.domain.repository.PeopleDetailRepository
-import com.sf.starwarssearch.domain.repository.StarWarsRepository
+import com.sf.starwarssearch.domain.repository.SearchRepository
 import com.sf.starwarssearch.domain.usecase.GetPeopleDetailUseCase
 import com.sf.starwarssearch.domain.usecase.GetSearchResultUseCase
 import dagger.Module
@@ -47,19 +47,19 @@ object ClassModule {
 
     @Singleton
     @Provides
-    fun provideStarWarsRemoteDataSource(service: StarWarsService): StarWarsRemoteDataSourceImpl {
-        return StarWarsRemoteDataSourceImpl(service)
+    fun provideStarWarsRemoteDataSource(service: StarWarsService): SearchRemoteDataSourceImpl {
+        return SearchRemoteDataSourceImpl(service)
     }
 
     @Singleton
     @Provides
-    fun provideStarWarsRepository(dataSource: StarWarsRemoteDataSource): StarWarsRepositoryImpl {
-        return StarWarsRepositoryImpl(dataSource)
+    fun provideStarWarsRepository(dataSource: SearchRemoteDataSource): SearchRepositoryImpl {
+        return SearchRepositoryImpl(dataSource)
     }
 
     @Singleton
     @Provides
-    fun provideSearchResultUseCase(repository: StarWarsRepository): GetSearchResultUseCase {
+    fun provideSearchResultUseCase(repository: SearchRepository): GetSearchResultUseCase {
         return GetSearchResultUseCase(repository)
     }
 

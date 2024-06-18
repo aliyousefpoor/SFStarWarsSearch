@@ -1,17 +1,17 @@
 package com.sf.starwarssearch.di
 
 import com.sf.starwarssearch.data.PeopleDetailRepositoryImpl
-import com.sf.starwarssearch.data.StarWarsRepositoryImpl
+import com.sf.starwarssearch.data.SearchRepositoryImpl
 import com.sf.starwarssearch.data.datasource.FilmsRemoteDataSource
 import com.sf.starwarssearch.data.datasource.FilmsRemoteDataSourceImpl
 import com.sf.starwarssearch.data.datasource.PlanetRemoteDataSource
 import com.sf.starwarssearch.data.datasource.PlanetRemoteDataSourceImpl
 import com.sf.starwarssearch.data.datasource.SpeciesRemoteDataSource
 import com.sf.starwarssearch.data.datasource.SpeciesRemoteDataSourceImpl
-import com.sf.starwarssearch.data.datasource.StarWarsRemoteDataSource
-import com.sf.starwarssearch.data.datasource.StarWarsRemoteDataSourceImpl
+import com.sf.starwarssearch.data.datasource.SearchRemoteDataSource
+import com.sf.starwarssearch.data.datasource.SearchRemoteDataSourceImpl
 import com.sf.starwarssearch.domain.repository.PeopleDetailRepository
-import com.sf.starwarssearch.domain.repository.StarWarsRepository
+import com.sf.starwarssearch.domain.repository.SearchRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,11 +24,11 @@ abstract class InterfaceModule {
 
     @Singleton
     @Binds
-    abstract fun bindStarWarsRemoteDataSource(remoteDataSourceImpl: StarWarsRemoteDataSourceImpl): StarWarsRemoteDataSource
+    abstract fun bindStarWarsRemoteDataSource(remoteDataSourceImpl: SearchRemoteDataSourceImpl): SearchRemoteDataSource
 
     @Singleton
     @Binds
-    abstract fun bindStarWarsRepository(starWarsRepositoryImpl: StarWarsRepositoryImpl): StarWarsRepository
+    abstract fun bindStarWarsRepository(starWarsRepositoryImpl: SearchRepositoryImpl): SearchRepository
 
 
     @Singleton
