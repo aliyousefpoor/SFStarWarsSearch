@@ -6,6 +6,7 @@ import com.sf.starwarssearch.domain.usecase.GetPeopleDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,10 +14,14 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(private val getPeopleDetailUseCase: GetPeopleDetailUseCase) :
     ViewModel() {
 
-
-    private val _state = MutableStateFlow<PeopleDataState?>(null)
-    val state: StateFlow<PeopleDataState?> get() = _state
-
+    private val _state = MutableStateFlow<PeopleDataState?>(
+        PeopleDataState(
+            isLoading = true,
+            peopleDetailResults = null,
+            isError = false
+        )
+    )
+    val state: StateFlow<PeopleDataState?> = _state
 
     fun getPeopleDetail(
         speciesUrl: List<String>?,
@@ -24,24 +29,26 @@ class DetailViewModel @Inject constructor(private val getPeopleDetailUseCase: Ge
         planetsUrl: String?
     ) {
         viewModelScope.launch {
-            _state.value =
-                PeopleDataState(isLoading = true, peopleDetailResults = null, isError = false)
             try {
                 val result =
                     getPeopleDetailUseCase.getPeopleDetail(speciesUrl, filmsUrl, planetsUrl)
                 result.let {
-                    _state.value = PeopleDataState(
-                        isLoading = false,
-                        peopleDetailResults = it,
-                        isError = false
-                    )
+                    _state.update {
+                        PeopleDataState(
+                            isLoading = false,
+                            peopleDetailResults = result,
+                            isError = false
+                        )
+                    }
                 }
             } catch (e: Exception) {
-                _state.value = PeopleDataState(
-                    isLoading = false,
-                    peopleDetailResults = null,
-                    isError = true
-                )
+                _state.update {
+                    PeopleDataState(
+                        isLoading = false,
+                        peopleDetailResults = null,
+                        isError = true
+                    )
+                }
             }
         }
     }

@@ -9,16 +9,16 @@ import com.sf.starwarssearch.domain.model.PeopleDetailModel
 
 @Stable
 class PeopleDataState(
-    isLoading: Boolean,
+    isLoading: Boolean? = true,
     peopleDetailResults: PeopleDetailModel? = null,
     isError: Boolean? = false
 ) {
-    private var isLoading by mutableStateOf(isLoading)
+    var isLoading by mutableStateOf(isLoading)
     var peopleDetailResults by mutableStateOf(peopleDetailResults)
-    private var isError by mutableStateOf(isError)
+    var isError by mutableStateOf(isError)
     val detailDisplay: DetailDisplay
         get() = when {
-            isLoading -> DetailDisplay.Loading
+            isLoading == true -> DetailDisplay.Loading
             isError == true -> DetailDisplay.Error
             else -> DetailDisplay.Result
         }
