@@ -34,11 +34,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import com.sf.starwarssearch.R
@@ -58,9 +58,8 @@ import java.net.URLEncoder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewModel) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
 
     Scaffold(topBar = {
@@ -75,7 +74,7 @@ fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewMode
     }, snackbarHost = { SnackbarHost(snackBarHostState) }) { paddingValues ->
 
         Column(modifier = Modifier.padding(16.dp)) {
-            var query by remember { mutableStateOf(viewModel.query ?: "") }
+            var query by rememberSaveable { mutableStateOf("") }
             OutlinedTextField(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorResource(id = R.color.blue),
@@ -104,7 +103,7 @@ fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewMode
                 onValueChange = {
                     query = it
                 },
-                isError = ((state is SearchState.EmptyState) || (state is SearchState.ErrorState)),
+                isError = state.isError || state.searchDisplay.name == SearchDisplay.NoResult.name,
                 modifier = Modifier
                     .padding(top = paddingValues.calculateTopPadding())
                     .fillMaxWidth()
@@ -112,21 +111,21 @@ fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewMode
 
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { viewModel.handleSearchIntent(SearchIntent.Search(query)) },
+                onClick = { viewModel.getSearchResult(query) },
                 enabled = query.isNotEmpty()
             ) {
                 Text("Search")
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            when (state) {
-                is SearchState.LoadingState -> {
-                    if ((state as SearchState.LoadingState).isLoading) ShowLoadingView()
+            when (state.searchDisplay) {
+                SearchDisplay.Loading -> {
+                    if (state.isLoading) ShowLoadingView()
                 }
 
-                is SearchState.ResultState -> {
-                    val result = (state as SearchState.ResultState).result
-                    result.let { results ->
+                SearchDisplay.Result -> {
+                    val result = state.searchResults
+                    result?.let { results ->
                         LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
                             item {
                                 Text(
@@ -154,11 +153,13 @@ fun SearchScreen(navHostController: NavHostController, viewModel: SearchViewMode
                     }
                 }
 
-                is SearchState.EmptyState -> {
+                SearchDisplay.NoResult -> {
                     NoResultView()
                 }
 
-                is SearchState.ErrorState -> {}
+                SearchDisplay.Error -> {
+                    NoResultView()
+                }
             }
         }
     }
@@ -269,16 +270,14 @@ fun NoResultView() {
         Image(
             painter = painterResource(id = R.drawable.not_found),
             contentDescription = "",
-            modifier = Modifier
-                .size(80.dp),
+            modifier = Modifier.size(80.dp),
             colorFilter = ColorFilter.tint(color = colorResource(id = R.color.white))
         )
         Text(
             text = stringResource(id = R.string.no_result_found),
             modifier = Modifier.padding(vertical = 16.dp),
             style = MaterialTheme.typography.bodyLarge.copy(
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.SemiBold
+                fontStyle = FontStyle.Italic, fontWeight = FontWeight.SemiBold
             )
         )
     }
