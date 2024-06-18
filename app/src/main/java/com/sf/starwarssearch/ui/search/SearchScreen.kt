@@ -99,9 +99,9 @@ fun SearchScreen(navHostController: NavHostController) {
                     focusedLabelColor = MaterialTheme.colorScheme.outline,
                     cursorColor = MaterialTheme.colorScheme.outline,
                     focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                    errorBorderColor = MaterialTheme.colorScheme.onError,
-                    errorLabelColor = MaterialTheme.colorScheme.onError,
-                    errorCursorColor = MaterialTheme.colorScheme.onError,
+                    errorBorderColor = MaterialTheme.colorScheme.error,
+                    errorLabelColor = MaterialTheme.colorScheme.error,
+                    errorCursorColor = MaterialTheme.colorScheme.error,
                     errorTextColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 leadingIcon = {

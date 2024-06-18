@@ -84,84 +84,87 @@ fun DetailScreen(people: PeopleItemModel, upPress: () -> Unit) {
 
 @Composable
 fun Body(people: PeopleItemModel, state: PeopleDataState?) {
-    Card(
-        modifier = Modifier
+    LazyColumn(
+        Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(16.dp), shape = RoundedCornerShape(8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        LazyColumn(
-            Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            item { PeopleData(people = people) }
-            when (state?.detailDisplay) {
-                DetailDisplay.Loading -> {
-                    item {
-                        ShowLoadingView()
-                        Spacer(modifier = Modifier.padding(bottom = 20.dp))
-                    }
+        item { PeopleData(people = people) }
+        when (state?.detailDisplay) {
+            DetailDisplay.Loading -> {
+                item {
+                    ShowLoadingView()
+                    Spacer(modifier = Modifier.padding(bottom = 20.dp))
                 }
-
-                DetailDisplay.Result -> {
-                    state.peopleDetailResults?.let {
-                        it.species?.let { specieModels -> item { SpeciesData(specieModels) } }
-                        it.planetPopulation?.let { planetModels -> item { PlanetData(planetModels) } }
-                        it.films?.let { filmsModels -> item { FilmsData(filmsModels) } }
-                    }
-                }
-
-                DetailDisplay.Error -> {
-                    item { ShowErrorView() }
-                }
-
-                else -> {}
             }
+
+            DetailDisplay.Result -> {
+                state.peopleDetailResults?.let {
+                    it.species?.let { specieModels -> item { SpeciesData(specieModels) } }
+                    it.planetPopulation?.let { planetModels -> item { PlanetData(planetModels) } }
+                    it.films?.let { filmsModels -> item { FilmsData(filmsModels) } }
+                }
+            }
+
+            DetailDisplay.Error -> {
+                item { ShowErrorView() }
+            }
+
+            else -> {}
         }
     }
+//}
 }
 
 
 @Composable
 fun PeopleData(people: PeopleItemModel) {
-    Column(
-        Modifier.fillMaxWidth()
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(vertical = 8.dp), shape = RoundedCornerShape(8.dp)
     ) {
-        Text(
-            text = stringResource(id = R.string.people_section),
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .padding(vertical = 2.dp)
+        Column(
+            Modifier
                 .fillMaxWidth()
-        )
+
+        ) {
+            Text(
+                text = stringResource(id = R.string.people_section),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .padding(vertical = 2.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
 
 
-        Text(
-            text = stringResource(id = R.string.name, people.name),
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .padding(vertical = 2.dp, horizontal = 8.dp)
-                .fillMaxWidth()
-        )
-        Text(
-            text = stringResource(id = R.string.height, people.height ?: ""),
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier
-                .padding(vertical = 2.dp, horizontal = 8.dp)
-                .fillMaxWidth()
-        )
-        Text(
-            text = stringResource(id = R.string.birth_year, people.birth_year ?: ""),
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .padding(vertical = 2.dp, horizontal = 8.dp)
-                .fillMaxWidth()
-        )
+            Text(
+                text = stringResource(id = R.string.name, people.name),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .padding(vertical = 2.dp, horizontal = 8.dp)
+                    .fillMaxWidth()
+            )
+            Text(
+                text = stringResource(id = R.string.height, people.height ?: ""),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .padding(vertical = 2.dp, horizontal = 8.dp)
+                    .fillMaxWidth()
+            )
+            Text(
+                text = stringResource(id = R.string.birth_year, people.birth_year ?: ""),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .padding(vertical = 2.dp, horizontal = 8.dp)
+                    .fillMaxWidth()
+            )
+        }
     }
 }
 
@@ -169,29 +172,37 @@ fun PeopleData(people: PeopleItemModel) {
 @Composable
 fun FilmsData(films: List<FilmsModel>) {
     if (films.isNotEmpty()) {
-        Column(
-            Modifier.fillMaxWidth()
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(vertical = 8.dp), shape = RoundedCornerShape(8.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.film_section),
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier
-                    .padding(vertical = 2.dp)
+            Column(
+                Modifier
                     .fillMaxWidth()
-            )
-            films.forEach { film ->
-                film.title?.let {
-                    FilmDetail(
-                        filmsModel = film,
-                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.film_section),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+                films.forEach { film ->
+                    film.title?.let {
+                        FilmDetail(
+                            filmsModel = film,
+                            modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
+                        )
+                    }
+                    Spacer(
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .fillMaxWidth()
                     )
                 }
-                Spacer(
-                    modifier = Modifier
-                        .padding(bottom = 8.dp)
-                        .fillMaxWidth()
-                )
             }
         }
     }
@@ -226,29 +237,41 @@ fun FilmDetail(
 @Composable
 fun SpeciesData(species: List<SpeciesModel>) {
     if (species.isNotEmpty()) {
-        Column(Modifier.fillMaxWidth()) {
-            Text(
-                text = stringResource(id = R.string.species_section),
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(vertical = 2.dp)
-            )
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(vertical = 8.dp), shape = RoundedCornerShape(8.dp)
+        ) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(id = R.string.species_section),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
 
 
-            species.forEach { specie ->
-                val modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
-                specie.name?.let { name -> SpeciesNameItem(name, modifier = modifier) }
-                specie.language?.let { language ->
-                    SpeciesLanguageItem(
-                        language = language,
-                        modifier = modifier
-                    )
-                }
-                specie.homeworld?.let { homeWorld ->
-                    SpeciesHomeWorldItem(
-                        homeWorld = homeWorld,
-                        modifier = modifier
-                    )
+                species.forEach { specie ->
+                    val modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
+                    specie.name?.let { name -> SpeciesNameItem(name, modifier = modifier) }
+                    specie.language?.let { language ->
+                        SpeciesLanguageItem(
+                            language = language,
+                            modifier = modifier
+                        )
+                    }
+                    specie.homeworld?.let { homeWorld ->
+                        SpeciesHomeWorldItem(
+                            homeWorld = homeWorld,
+                            modifier = modifier
+                        )
+                    }
                 }
             }
         }
@@ -261,9 +284,10 @@ fun SpeciesNameItem(name: String, modifier: Modifier) {
     Text(
         text = stringResource(id = R.string.name, name),
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = MaterialTheme.colorScheme.onSecondary,
-        modifier = modifier
-    )
+        color = MaterialTheme.colorScheme.onPrimary,
+        modifier = modifier,
+
+        )
 }
 
 
@@ -272,7 +296,7 @@ fun SpeciesLanguageItem(language: String, modifier: Modifier) {
     Text(
         text = stringResource(id = R.string.language, language),
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = MaterialTheme.colorScheme.onSecondary,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = modifier
     )
 }
@@ -283,7 +307,7 @@ fun SpeciesHomeWorldItem(homeWorld: String, modifier: Modifier) {
     Text(
         text = stringResource(id = R.string.home_world, homeWorld),
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = MaterialTheme.colorScheme.onSecondary,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = modifier
     )
 }
@@ -292,23 +316,35 @@ fun SpeciesHomeWorldItem(homeWorld: String, modifier: Modifier) {
 @Composable
 fun PlanetData(planets: List<PlanetModel>) {
     if (planets.isNotEmpty()) {
-        Column(Modifier.fillMaxWidth()) {
-            Text(
-                text = stringResource(id = R.string.planet_section),
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(vertical = 2.dp)
-            )
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(vertical = 8.dp), shape = RoundedCornerShape(8.dp)
+        ) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(id = R.string.planet_section),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
 
 
-            planets.forEach { planet ->
-                planet.population?.let {
-                    Text(
-                        text = stringResource(id = R.string.population, planet.population),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
-                    )
+                planets.forEach { planet ->
+                    planet.population?.let {
+                        Text(
+                            text = stringResource(id = R.string.population, planet.population),
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
+                        )
+                    }
                 }
             }
         }
