@@ -61,11 +61,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.material)
@@ -83,5 +78,22 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
+
+    // Required -- JUnit 4 framework
+    testImplementation(libs.junit)
+    // Optional -- Robolectric environment
+    testImplementation(libs.androidx.core)
+    // Optional -- Mockito framework
+    testImplementation(libs.mockito.core)
+    // Optional -- mockito-kotlin
+    testImplementation(libs.mockito.kotlin)
+    // Optional -- Mockk framework
+    testImplementation(libs.mockk)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.turbine)
+
+
 
 }
