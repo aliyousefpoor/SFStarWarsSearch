@@ -46,7 +46,7 @@ fun SpeciesEntity.mapToSpeciesModel(): SpeciesModel {
 }
 
 fun FilmsEntity.mapToFilmsModel(): FilmsModel {
-    return FilmsModel(title = title, opening_crawl = opening_crawl)
+    return FilmsModel(title = title, opening_crawl = opening_crawl?.replace("\n", ""))
 }
 
 fun PlanetEntity.mapToPlanetModel(): PlanetModel {

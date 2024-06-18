@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -69,6 +71,7 @@ fun DetailScreen(people: PeopleItemModel, upPress: () -> Unit) {
                     top = paddingValue.calculateTopPadding(),
                     bottom = paddingValue.calculateBottomPadding()
                 )
+                .windowInsetsPadding(TopAppBarDefaults.windowInsets)
         ) {
             Body(people = people, state = state)
         }
@@ -82,9 +85,13 @@ fun Body(people: PeopleItemModel, state: PeopleDataState?) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(8.dp), shape = RoundedCornerShape(8.dp)
+            .padding(16.dp), shape = RoundedCornerShape(8.dp)
     ) {
-        LazyColumn(Modifier.fillMaxWidth()) {
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
             item { PeopleData(people = people) }
             when (state?.detailDisplay) {
                 DetailDisplay.Loading -> {
@@ -109,7 +116,6 @@ fun Body(people: PeopleItemModel, state: PeopleDataState?) {
                 else -> {}
             }
         }
-
     }
 }
 
@@ -117,16 +123,24 @@ fun Body(people: PeopleItemModel, state: PeopleDataState?) {
 @Composable
 fun PeopleData(people: PeopleItemModel) {
     Column(
-        Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
+        Modifier.fillMaxWidth()
     ) {
         Text(
-            text = "Name: ${people.name}",
+            text = "People Section:",
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
             color = colorResource(id = R.color.white),
             modifier = Modifier
                 .padding(vertical = 2.dp)
+                .fillMaxWidth()
+        )
+
+
+        Text(
+            text = "Name: ${people.name}",
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            color = colorResource(id = R.color.white),
+            modifier = Modifier
+                .padding(vertical = 2.dp, horizontal = 8.dp)
                 .fillMaxWidth()
         )
         Text(
@@ -134,7 +148,7 @@ fun PeopleData(people: PeopleItemModel) {
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
             color = colorResource(id = R.color.gray_100),
             modifier = Modifier
-                .padding(vertical = 2.dp)
+                .padding(vertical = 2.dp, horizontal = 8.dp)
                 .fillMaxWidth()
         )
         Text(
@@ -142,7 +156,7 @@ fun PeopleData(people: PeopleItemModel) {
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
             color = colorResource(id = R.color.white),
             modifier = Modifier
-                .padding(vertical = 2.dp)
+                .padding(vertical = 2.dp, horizontal = 8.dp)
                 .fillMaxWidth()
         )
     }
@@ -151,108 +165,131 @@ fun PeopleData(people: PeopleItemModel) {
 
 @Composable
 fun FilmsData(films: List<FilmsModel>) {
-    Column(
-        Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = "Film Section:",
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-            color = colorResource(id = R.color.white),
-            modifier = Modifier
-                .padding(vertical = 2.dp)
-                .fillMaxWidth()
-        )
-        films.forEach { film ->
-            film.title?.let { FilmDetail(film) }
-            Spacer(
+    if (films.isNotEmpty()) {
+        Column(
+            Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Film Section:",
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                color = colorResource(id = R.color.white),
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(vertical = 2.dp)
                     .fillMaxWidth()
             )
+            films.forEach { film ->
+                film.title?.let {
+                    FilmDetail(
+                        filmsModel = film,
+                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
+                    )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .fillMaxWidth()
+                )
+            }
         }
     }
 }
 
 
 @Composable
-fun FilmDetail(filmsEntity: FilmsModel) {
-    Text(
-        text = "Title : ${filmsEntity.title}",
-        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-        color = colorResource(id = R.color.gray_100),
-        modifier = Modifier.padding(vertical = 2.dp)
-    )
+fun FilmDetail(
+    filmsModel: FilmsModel,
+    modifier: Modifier
+) {
+    if (!filmsModel.title.isNullOrEmpty()) {
+        Text(
+            text = "Title : ${filmsModel.title}",
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+            color = colorResource(id = R.color.gray_100),
+            modifier = modifier.fillMaxWidth()
+        )
+    }
 
-
-    Text(
-        text = "Detail : ${filmsEntity.opening_crawl?.replace("\n", "")}",
-        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = colorResource(id = R.color.gray_100),
-        modifier = Modifier
-            .padding(vertical = 2.dp)
-            .fillMaxWidth()
-    )
+    if (!filmsModel.opening_crawl.isNullOrEmpty()) {
+        Text(
+            text = "Detail : ${filmsModel.opening_crawl}",
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = colorResource(id = R.color.gray_100),
+            modifier = modifier.fillMaxWidth()
+        )
+    }
 }
 
 
 @Composable
 fun SpeciesData(species: List<SpeciesModel>) {
-    Column(Modifier.padding(8.dp)) {
-        Text(
-            text = "Species Section:",
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-            color = colorResource(id = R.color.white),
-            modifier = Modifier.padding(vertical = 2.dp)
-        )
+    if (species.isNotEmpty()) {
+        Column(Modifier.fillMaxWidth()) {
+            Text(
+                text = "Species Section:",
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                color = colorResource(id = R.color.white),
+                modifier = Modifier.padding(vertical = 2.dp)
+            )
 
-        species.forEach { specie ->
-            specie.name?.let { name -> SpeciesNameItem(name) }
-            specie.language?.let { language -> SpeciesLanguageItem(language = language) }
-            specie.homeworld?.let { homeWorld -> SpeciesHomeWorldItem(homeWorld = homeWorld) }
+
+            species.forEach { specie ->
+                val modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
+                specie.name?.let { name -> SpeciesNameItem(name, modifier = modifier) }
+                specie.language?.let { language ->
+                    SpeciesLanguageItem(
+                        language = language,
+                        modifier = modifier
+                    )
+                }
+                specie.homeworld?.let { homeWorld ->
+                    SpeciesHomeWorldItem(
+                        homeWorld = homeWorld,
+                        modifier = modifier
+                    )
+                }
+            }
         }
     }
 }
 
 
 @Composable
-fun SpeciesNameItem(name: String) {
+fun SpeciesNameItem(name: String, modifier: Modifier) {
     Text(
         text = "Name :$name",
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
         color = colorResource(id = R.color.gray_100),
-        modifier = Modifier.padding(vertical = 2.dp)
+        modifier = modifier
     )
 }
 
 
 @Composable
-fun SpeciesLanguageItem(language: String) {
+fun SpeciesLanguageItem(language: String, modifier: Modifier) {
     Text(
         text = "Language : $language",
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
         color = colorResource(id = R.color.gray_100),
-        modifier = Modifier.padding(vertical = 2.dp)
+        modifier = modifier
     )
 }
 
 
 @Composable
-fun SpeciesHomeWorldItem(homeWorld: String) {
+fun SpeciesHomeWorldItem(homeWorld: String, modifier: Modifier) {
     Text(
         text = "HomeWorld : $homeWorld",
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
         color = colorResource(id = R.color.gray_100),
-        modifier = Modifier.padding(vertical = 2.dp)
+        modifier = modifier
     )
 }
 
 
 @Composable
-fun PlanetData(planets: List<PlanetModel>?) {
-    planets?.let {
-        Column(Modifier.padding(8.dp)) {
+fun PlanetData(planets: List<PlanetModel>) {
+    if (planets.isNotEmpty()) {
+        Column(Modifier.fillMaxWidth()) {
             Text(
                 text = "Planet Section:",
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
@@ -260,13 +297,14 @@ fun PlanetData(planets: List<PlanetModel>?) {
                 modifier = Modifier.padding(vertical = 2.dp)
             )
 
+
             planets.forEach { planet ->
                 planet.population?.let {
                     Text(
                         text = "Population : ${planet.population}",
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                         color = colorResource(id = R.color.gray_100),
-                        modifier = Modifier.padding(vertical = 2.dp)
+                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp)
                     )
                 }
             }
