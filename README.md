@@ -20,7 +20,8 @@ In project you'll find:
 
 *Detail Page*
 
-<img src="https://github.com/aliyousefpoor/SFStarWarsSearch/blob/develop/app/src/main/res/drawable/detail_loading.jpg" width="300" height="500"> <img src="https://github.com/aliyousefpoor/SFStarWarsSearch/blob/develop/app/src/main/res/drawable/detail_result.jpg" width="300" height="500">
+<img src="https://github.com/aliyousefpoor/SFStarWarsSearch/blob/develop/app/src/main/res/drawable/detail_loading.jpg" width="300" height="500"> <img src="https://github.com/aliyousefpoor/SFStarWarsSearch/blob/develop/app/src/main/res/drawable/detail_result1.jpg" width="300" height="500">
+<img src="https://github.com/aliyousefpoor/SFStarWarsSearch/blob/develop/app/src/main/res/drawable/detail_result2.jpg" width="300" height="500">
 
 
 
