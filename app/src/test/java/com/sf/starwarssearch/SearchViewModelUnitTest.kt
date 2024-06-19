@@ -23,15 +23,11 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class SearchViewModelUnitTest {
 
-
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
-
 
     private lateinit var searchViewModel: SearchViewModel
 
-
     private val getSearchResultUseCase: GetSearchResultUseCase = mockk()
-
 
     private val people = PeopleItemModel(
         name = "Leia Organa",

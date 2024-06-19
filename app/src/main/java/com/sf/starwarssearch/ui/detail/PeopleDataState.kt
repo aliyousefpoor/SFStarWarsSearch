@@ -13,9 +13,9 @@ class PeopleDataState(
     peopleDetailResults: PeopleDetailModel? = null,
     isError: Boolean? = false
 ) {
-    private var isLoading by mutableStateOf(isLoading)
+    var isLoading by mutableStateOf(isLoading)
     var peopleDetailResults by mutableStateOf(peopleDetailResults)
-    private var isError by mutableStateOf(isError)
+    var isError by mutableStateOf(isError)
     val detailDisplay: DetailDisplay
         get() = when {
             isLoading == true -> DetailDisplay.Loading
