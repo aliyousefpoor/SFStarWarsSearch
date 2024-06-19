@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -159,7 +160,8 @@ fun SearchScreen(navHostController: NavHostController) {
                     if (!result?.results.isNullOrEmpty()) {
                         LazyColumn(
                             state = listState,
-                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             item {
                                 SearchItemCount(result?.count!!)
@@ -199,7 +201,7 @@ fun SearchItemCount(count: Int) {
     Text(
         text = stringResource(id = R.string.item_count, count),
         modifier = Modifier.wrapContentWidth(),
-        color = MaterialTheme.colorScheme.onPrimary,
+        color = MaterialTheme.colorScheme.inverseSurface,
         style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
     )
 }
@@ -217,91 +219,90 @@ fun SearchResultItem(modifier: Modifier, people: PeopleItemModel, onClick: () ->
             shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.onSecondary)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                Row(
-                    modifier = modifier
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
                         .wrapContentHeight()
-                        .wrapContentHeight(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
+                        .weight(1f)
+                        .padding(8.dp)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.name, ""),
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-
-                    Text(
-                        text = people.name,
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
-
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.birth_date),
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-
-                    Text(
-                        text = people.birthYear,
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .padding(vertical = 2.dp, horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
-
-                if (people.films?.isNotEmpty() == true) {
                     Row(
                         modifier = modifier
                             .fillMaxWidth()
-                            .wrapContentHeight(),
+                            .wrapContentHeight()
+                            .padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = people.name,
+                            modifier = Modifier
+                                .wrapContentWidth(),
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    }
+
+                    Row(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(horizontal = 4.dp),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(id = R.string.film_count),
+                            text = stringResource(id = R.string.birth_date),
                             modifier = Modifier
-                                .wrapContentWidth()
-                                .padding(vertical = 2.dp, horizontal = 4.dp),
+                                .wrapContentWidth(),
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                             color = MaterialTheme.colorScheme.onPrimary,
                         )
 
                         Text(
-                            text = "${people.films.size}",
+                            text = people.birthYear,
                             modifier = Modifier
-                                .wrapContentWidth()
-                                .padding(vertical = 2.dp, horizontal = 4.dp),
+                                .wrapContentWidth(),
                             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                             color = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
+
+                    if (people.films?.isNotEmpty() == true) {
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(horizontal = 4.dp),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.film_count),
+                                modifier = Modifier
+                                    .wrapContentWidth(),
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
+
+                            Text(
+                                text = "${people.films.size}",
+                                modifier = Modifier
+                                    .wrapContentWidth(),
+                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
+                        }
+                    }
                 }
+
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = stringResource(id = R.string.show_more),
+                    modifier = Modifier.padding(end = 8.dp),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }

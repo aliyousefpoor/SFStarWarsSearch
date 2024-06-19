@@ -19,5 +19,7 @@
     <string name="home_world">HomeWorld : %s</string>
     <string name="item_count">%s Items</string>
     <string name="birth_date">BirthDate :</string>
-    <string name="film_count">Films Count :</string>
+    <string name="film_count">Film Count :</string>
+    <string name="show_less">Show Less</string>
+    <string name="show_more">Show More</string>
 </resources>
