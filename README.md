@@ -27,7 +27,7 @@ In project you'll find:
 
 ## Architecture
 
-This project is organized following the MVVM architecture pattern with Clean Architecture principles, which divides the code into multiple layers:
+This project is organized following the Clean Architecture principles, which divides the code into multiple layers:
 
 ### Presentation Layer
 
